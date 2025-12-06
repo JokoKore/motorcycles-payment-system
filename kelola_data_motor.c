@@ -8,14 +8,16 @@ struct Motor {
     int harga;
 };
 
-void saveToFile(struct Motor data[], int jumlah) {
+void saveToFile(struct Motor data[], int jumlah)
+{
     FILE *fp = fopen("motor.dat", "wb");
     fwrite(&jumlah, sizeof(int), 1, fp);
     fwrite(data, sizeof(struct Motor), jumlah, fp);
     fclose(fp);
 }
 
-void loadFromFile(struct Motor data[], int *jumlah) {
+void loadFromFile(struct Motor data[], int *jumlah)
+{
     FILE *fp = fopen("motor.dat", "rb");
     if (fp == NULL) {
         *jumlah = 0; 
@@ -26,7 +28,8 @@ void loadFromFile(struct Motor data[], int *jumlah) {
     fclose(fp);
 }
 
-int kelolaDataMotor() {
+int kelolaDataMotor()
+{
     struct Motor data[50];
     int jumlah = 0;
     int pilihan;
@@ -47,7 +50,6 @@ int kelolaDataMotor() {
         switch (pilihan) {
 
         case 1: {
-            // Tambah data
             printf("\nMasukkan Merk Motor  : ");
             scanf("%s", data[jumlah].merk);
 
@@ -68,7 +70,6 @@ int kelolaDataMotor() {
         }
 
         case 2: {
-            // Tampilkan data
             if (jumlah == 0) {
                 printf("\nData motor masih kosong!\n");
             } else {

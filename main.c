@@ -7,30 +7,29 @@ int main(int argc, char const *argv[])
 {
 
     int pilihan;
-    printf("\n\t\t\t\t-----------------Selamata datang diToko Motor KEL02-----------------\n");
-    printf("\n\t\t\t\t-----------------Silaka Login Terlebih Dahulu-----------------\n");
+    printf("\n\t\t\t\t-----------------Selamat datang di toko botor KELOMPOK 02-----------------\n");
+    printf("\n\t\t\t\t-----------------Silakan login terlebih dahulu-----------------\n");
     printf("1. Login Admin\n");
-    printf("2. login Pembeli\n");
-    printf("Masukkan Pilihan Anda : ");
+    printf("2. Login Pembeli\n");
+    printf("Masukkan Pilihan Anda: ");
     scanf("%d", &pilihan);
 
 
-    switch (pilihan)
-    {
+    switch (pilihan) {
         case 1:
             loginAdmin();
             kelolaDataMotor();
-
-        break;
+            break;
 
         case 2:
             loginPembeli();
             break;
     
-         default:
-         printf("Pilihan tidak valid!\n");
-        break;
+        default:
+            printf("Pilihan tidak valid!\n");
+            break;
     }
+
     return 0;
 }
 
