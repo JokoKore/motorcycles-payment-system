@@ -14,7 +14,7 @@ int loginAdmin()
         printf("Password: ");
         scanf("%s", password);
         
-        if (strcmp(user, "admin") != 0 && strcmp(password, "123") != 0) {
+        if (strcmp(user, "admin") != 0 || strcmp(password, "123") != 0) {
             printf("Username atau password salah!\n");
             percobaan--;
             printf("\nPercobaan tersisa: %d\n", percobaan);
@@ -27,5 +27,5 @@ int loginAdmin()
 
     printf("\nAnda telah gagal login 3 kali. Akses diblokir.\n");
 
-    return 0;
+    return 1;
 }

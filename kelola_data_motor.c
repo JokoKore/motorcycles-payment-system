@@ -1,12 +1,6 @@
 #include <stdio.h>
 #include <string.h>
-
-struct Motor {
-    char merk[30];
-    char tipe[30];
-    int tahun;
-    int harga;
-};
+#include "header.h"
 
 void saveToFile(struct Motor data[], int jumlah)
 {
@@ -19,8 +13,8 @@ void saveToFile(struct Motor data[], int jumlah)
 void loadFromFile(struct Motor data[], int *jumlah)
 {
     FILE *fp = fopen("motor.dat", "rb");
-    if (fp == NULL) {
-        *jumlah = 0; 
+    if (!fp) {
+        *jumlah = 0;
         return;
     }
     fread(jumlah, sizeof(int), 1, fp);
@@ -58,9 +52,11 @@ int kelolaDataMotor()
 
             printf("Masukkan Tahun Motor : ");
             scanf("%d", &data[jumlah].tahun);
-
-            printf("Masukkan Harga Motor : ");
-            scanf("%d", &data[jumlah].harga);
+            
+            printf("Masukkan harga Motor : ");
+            scanf("%d", &data[jumlah].harga_final);
+            
+            data[jumlah].harga_final = 0;
 
             jumlah++;
             saveToFile(data, jumlah);
@@ -70,23 +66,25 @@ int kelolaDataMotor()
         }
 
         case 2: {
+            loadFromFile(data, &jumlah);
             if (jumlah == 0) {
                 printf("\nData motor masih kosong!\n");
             } else {
                 printf("\n=== LIST DATA MOTOR ===\n");
+
                 for (int i = 0; i < jumlah; i++) {
                     printf("Data ke-%d:\n", i + 1);
-                    printf("  Merk  : %s\n", data[i].merk);
-                    printf("  Tipe  : %s\n", data[i].tipe);
-                    printf("  Tahun : %d\n", data[i].tahun);
-                    printf("  Harga : %d\n\n", data[i].harga);
+                    printf("  Merk        : %s\n", data[i].merk);
+                    printf("  Tipe        : %s\n", data[i].tipe);
+                    printf("  Tahun       : %d\n", data[i].tahun);
+                    printf("  Harga Final : %.2f\n", data[i].harga_final);
+
                 }
             }
             break;
         }
 
         case 3: {
-            // Edit data
             int index;
             printf("\nMasukkan nomor data yang akan diedit (1 - %d): ", jumlah);
             scanf("%d", &index);
@@ -102,9 +100,6 @@ int kelolaDataMotor()
                 printf("Tahun Baru : ");
                 scanf("%d", &data[index].tahun);
 
-                printf("Harga Baru : ");
-                scanf("%d", &data[index].harga);
-
                 saveToFile(data, jumlah);
                 printf("Data motor berhasil diperbarui!\n");
             } else {
@@ -114,7 +109,6 @@ int kelolaDataMotor()
         }
 
         case 4: {
-            // Hapus data
             int index;
             printf("\nMasukkan nomor data yang akan dihapus (1 - %d): ", jumlah);
             scanf("%d", &index);
@@ -135,7 +129,6 @@ int kelolaDataMotor()
         }
 
         case 5: {
-            // Cari data
             char cari[30];
             int found = 0;
 
@@ -148,7 +141,6 @@ int kelolaDataMotor()
                     printf("Merk  : %s\n", data[i].merk);
                     printf("Tipe  : %s\n", data[i].tipe);
                     printf("Tahun : %d\n", data[i].tahun);
-                    printf("Harga : %d\n\n", data[i].harga);
                     found = 1;
                 }
             }
@@ -160,7 +152,7 @@ int kelolaDataMotor()
         }
 
         case 6:
-            printf("\nTerima kasih telah menggunakan program ini.\n");
+            printf("\nKembali ke menu admin...\n");
             break;
 
         default:

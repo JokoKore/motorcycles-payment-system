@@ -8,27 +8,24 @@
 #define TAB 9
 #define BCKSPC 8
 
-
-struct User
-{
+struct User {
     char username[50];
     char name[50];
     char email[50];
     char password[50];
     char address[50];
-    char gender[20];
+    char gender[50];
 };
- 
-void takeInput(char input[50])
-{
+
+void takeInput(char input[50]) {
     fgets(input, 50, stdin);
-    input[strlen(input) - 1] = 0;
+    input[strcspn(input, "\n")] = 0;  // safer
 }
 
-void takePassword(char password[50])
-{
-    int i;
+void takePassword(char password[50]) {
+    int i = 0;          // FIXED: harus 0
     char input;
+
     while (1) {
         input = getch();
         if (input == ENTER || input == TAB) {
@@ -38,48 +35,47 @@ void takePassword(char password[50])
             if (i > 0) {
                 i--;
                 printf("\b \b");
-            }   
+            }
         } else {
             password[i++] = input;
-            printf("* \b");
-        }  
+            printf("*");
+        }
     }
     printf("\n");
 }
 
-char generateUsername(char email[50], char username[50])
-{
-    for (int i = 0; i < strlen(email); i++) {
+void generateUsername(char email[50], char username[50]) {
+    int i;
+    for (i = 0; i < strlen(email); i++) {
         if (email[i] == '@')
             break;
-        else 
-            username[i] = email[i];
+        username[i] = email[i];
     }
+    username[i] = '\0'; 
 }
 
-int loginPembeli()
-{
+int loginPembeli() {
     int opt;
     bool user_found;
     char confirm_password[50];
     struct User user;
     FILE *file_password;
 
-    printf("Choose Your Option: \n");
     printf("1. Sign Up\n");
     printf("2. Login\n");
-    printf("3. exit\n");
-    printf("Your Choice: ");
+    printf("3. Keluar\n");
+    printf("Masukan pilihan: ");
     scanf("%d", &opt);
     fgetc(stdin);
 
     switch (opt) {
+
     case 1:
         printf("Enter Your Fullname: ");
         takeInput(user.name);
         printf("Enter Your Email: ");
         takeInput(user.email);
-        printf("Enter Your gender: ");
+        printf("Enter Your Gender: ");
         takeInput(user.gender);
         printf("Enter Your Address: ");
         takeInput(user.address);
@@ -89,23 +85,23 @@ int loginPembeli()
         takePassword(confirm_password);
 
         if (strcmp(user.password, confirm_password) == 0) {
+
             generateUsername(user.email, user.username);
 
-            file_password = fopen("User.dat", "a+");
+            file_password = fopen("User.dat", "ab");
 
-            fwrite(&user, sizeof(user), 1, file_password);            
-            if (fwrite != 0) 
-                printf("\n\nUser Regitration succsess, Your username is %s", user.username);
+            if (fwrite(&user, sizeof(user), 1, file_password) == 1)
+                printf("\nUser Registration success, Your username is %s\n", user.username);
             else
-                printf("\nsomething went Wrong");
+                printf("\nSomething went wrong");
 
             fclose(file_password);
         } else {
-            printf("\nYour password do not matched");
+            printf("\nYour password does not match\n");
         }
         break;
 
-    case 2:
+    case 2: {
         char username[50], password[50];
         struct User usr;
         int chances = 3;
@@ -114,14 +110,14 @@ int loginPembeli()
         printf("\nEnter your username: ");
         takeInput(username);
 
-        file_password = fopen("User.dat", "r");
+        file_password = fopen("User.dat", "rb");
 
         if (file_password == NULL) {
-            printf("\nNo user database found!");
+            printf("\nNo user database found!\n");
             break;
         }
 
-        while (fread(&usr, sizeof(user), 1, file_password)) {
+        while (fread(&usr, sizeof(usr), 1, file_password)) {
             if (strcmp(usr.username, username) == 0) {
                 user_found = true;
 
@@ -130,39 +126,38 @@ int loginPembeli()
                     takePassword(password);
 
                     if (strcmp(usr.password, password) == 0) {
-                        printf("\n\nLogin Successful!");
-                        printf("\nWelcome %s", usr.username);
-                        printf("\n|Full Name:\t  %s", usr.name);
-                        printf("\n|Email:\t      %s", usr.email);
-                        printf("\n|Username:\t  %s", usr.username);
-                        printf("\n|Address:\t  %s\n", usr.address);
-                        chances = -1;  
+                        printf("\nLogin Successful!\n");
+                        printf("Welcome %s\n", usr.username);
+                        printf("| Full Name : %s\n", usr.name);
+                        printf("| Email     : %s\n", usr.email);
+                        printf("| Username  : %s\n", usr.username);
+                        printf("| Address   : %s\n", usr.address);
+                        chances = -1;
                         break;
                     } else {
-                        printf("\nWrong password!");
+                        printf("Wrong password!\n");
                         chances--;
                     }
                 }
 
-                if (chances == 0) {
-                    printf("\n\nYou have used all 3 attempts! Login Failed.\n");
-                }
+                if (chances == 0)
+                    printf("\nYou have used all 3 attempts! Login Failed.\n");
 
                 break;
             }
         }
 
-        if (!user_found) {
-            printf("\nUser is not registered!");
-        }
+        if (!user_found)
+            printf("\nUser is not registered!\n");
 
         fclose(file_password);
         break;
+    }
 
     default:
         printf("Exiting...\n");
         break;
     }
 
-    return 0;
+    return 1;
 }

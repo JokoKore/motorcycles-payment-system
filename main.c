@@ -1,7 +1,9 @@
 #include <stdio.h>
-#include "login_admin.c"
-#include "login_pembeli.c"
-#include "kelola_data_motor.c"
+#include <stdlib.h>
+#include "login_admin.h"
+#include "login_pembeli.h"
+#include "menu_admin.h"
+#include "menu_pembeli.C"
 
 int main(int argc, char const *argv[])
 {
@@ -17,12 +19,18 @@ int main(int argc, char const *argv[])
 
     switch (pilihan) {
         case 1:
-            loginAdmin();
-            kelolaDataMotor();
+            if (loginAdmin() != 0) {
+                exit(1); 
+            }
+            menuAdmin();
             break;
 
         case 2:
-            loginPembeli();
+         if (loginPembeli() != 0) {
+                exit(1); 
+            }
+            menuPembeli();
+            
             break;
     
         default:
