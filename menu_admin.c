@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include "header.h"
 #include "menu_admin.h"
-#include "kelola_harga.h"
 #include "kelola_data_motor.h"
 
 void menuAdmin() {
@@ -9,7 +8,6 @@ void menuAdmin() {
     do {
         printf("\n=========== MENU ADMIN ===========\n");
         printf("1. Kelola Data Motor\n");
-        printf("2. Tentukan Harga Motor\n");
         printf("0. Logout\n");
         printf("Pilih menu: ");
         scanf("%d", &pilihan_admin);
@@ -20,24 +18,24 @@ void menuAdmin() {
                 break;
 
             case 2: {
-                char tipe_motor[50];
-                int harga;
-                float diskon;
+                // char tipe_motor[50];
+                // int harga;
+                // float diskon;
 
-                printf("Masukkan tipe motor (Sport/Matic/Bebek): ");
-                scanf("%s", tipe_motor);
+                // printf("Masukkan tipe motor (Sport/Matic/Bebek): ");
+                // scanf("%s", tipe_motor);
 
-                printf("Masukkan harga motor: ");
-                scanf("%d", &harga);
+                // printf("Masukkan harga motor: ");
+                // scanf("%d", &harga);
 
-                printf("Masukkan diskon motor (0.1 untuk 10%%): ");
-                scanf("%f", &diskon);
+                // printf("Masukkan diskon motor (0.1 untuk 10%%): ");
+                // scanf("%f", &diskon);
 
-                menentukanHarga(tipe_motor, harga, diskon);
-                masukkanHargaKeMotor();
+                // menentukanHarga(tipe_motor, harga, diskon);
+                // masukkanHargaKeMotor();
 
-                float harga_final = harga - (harga * diskon);
-                printf("Harga motor setelah diskon : %.2f\n", harga_final);
+                // float harga_final = harga - (harga * diskon);
+                // printf("Harga motor setelah diskon : %.2f\n", harga_final);
 
                 break;
             }

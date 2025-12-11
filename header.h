@@ -5,8 +5,11 @@ struct Motor {
     char merk[30];
     char tipe[30];
     int tahun;
-    float harga_final;
+    float harga_asli;   
+    float diskon;        
+    float harga_final;   
 };
+
 
 struct Harga {
     char tipe_motor[30];
@@ -23,6 +26,7 @@ struct DataPembeli
     char email[50];
 };
 
+float harga_setelah_diskon(float harga, float diskon);
 
 
 #endif

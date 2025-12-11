@@ -1,29 +1,44 @@
 #include <stdio.h>
 #include <string.h>
+#include <ctype.h>
 #include "header.h"
 
-void saveToFile(struct Motor data[], int jumlah)
-{
+
+float harga_setelah_diskon(float harga, float diskon) {
+    return harga - (harga * diskon / 100);
+}
+
+
+void saveToFile(struct Motor data[], int jumlah) {
     FILE *fp = fopen("motor.dat", "wb");
+    if (!fp) return;
+
     fwrite(&jumlah, sizeof(int), 1, fp);
     fwrite(data, sizeof(struct Motor), jumlah, fp);
+
     fclose(fp);
 }
 
-void loadFromFile(struct Motor data[], int *jumlah)
-{
+void loadFromFile(struct Motor data[], int *jumlah) {
     FILE *fp = fopen("motor.dat", "rb");
     if (!fp) {
         *jumlah = 0;
         return;
     }
+
     fread(jumlah, sizeof(int), 1, fp);
+
+    if (*jumlah < 0 || *jumlah > 50) {
+        *jumlah = 0;     // file rusak
+        fclose(fp);
+        return;
+    }
+
     fread(data, sizeof(struct Motor), *jumlah, fp);
     fclose(fp);
 }
 
-int kelolaDataMotor()
-{
+int kelolaDataMotor() {
     struct Motor data[50];
     int jumlah = 0;
     int pilihan;
@@ -44,26 +59,32 @@ int kelolaDataMotor()
         switch (pilihan) {
 
         case 1: {
-            printf("\nMasukkan Merk Motor  : ");
-            scanf("%s", data[jumlah].merk);
+    float harga_asli;
 
-            printf("Masukkan Tipe Motor  : ");
-            scanf("%s", data[jumlah].tipe);
+    printf("\nMasukkan Merk Motor  : ");
+    scanf("%s", data[jumlah].merk);
 
-            printf("Masukkan Tahun Motor : ");
-            scanf("%d", &data[jumlah].tahun);
-            
-            printf("Masukkan harga Motor : ");
-            scanf("%d", &data[jumlah].harga_final);
-            
-            data[jumlah].harga_final = 0;
+    printf("Masukkan Tipe Motor  : ");
+    scanf("%s", data[jumlah].tipe);
 
-            jumlah++;
-            saveToFile(data, jumlah);
+    printf("Masukkan Tahun Motor : ");
+    scanf("%d", &data[jumlah].tahun);
 
-            printf("Data motor berhasil ditambahkan!\n");
-            break;
-        }
+    printf("Masukkan Harga Motor : ");
+    scanf("%f", &harga_asli);
+
+    printf("Masukkan Diskon (%%) : ");
+    scanf("%f", &data[jumlah].diskon);
+
+    data[jumlah].harga_final = harga_setelah_diskon(harga_asli, data[jumlah].diskon);
+
+    jumlah++;
+    saveToFile(data, jumlah);
+
+    printf("Data motor berhasil ditambahkan!\n");
+    break;
+}
+
 
         case 2: {
             loadFromFile(data, &jumlah);
@@ -77,7 +98,9 @@ int kelolaDataMotor()
                     printf("  Merk        : %s\n", data[i].merk);
                     printf("  Tipe        : %s\n", data[i].tipe);
                     printf("  Tahun       : %d\n", data[i].tahun);
-                    printf("  Harga Final : %.2f\n", data[i].harga_final);
+                    printf("  Harga       : %.2f\n", data[i].harga_asli);
+                    printf("  Diskon      : %.2f\n", data[i].diskon);
+                    printf("  Harga Akhir : %.2f\n\n",data[i].harga_final);
 
                 }
             }
@@ -99,6 +122,9 @@ int kelolaDataMotor()
 
                 printf("Tahun Baru : ");
                 scanf("%d", &data[index].tahun);
+
+                printf("Harga Baru : ");
+                scanf("%f", &data[index].harga_final);
 
                 saveToFile(data, jumlah);
                 printf("Data motor berhasil diperbarui!\n");
@@ -135,12 +161,22 @@ int kelolaDataMotor()
             printf("\nMasukkan merk motor yang dicari: ");
             scanf("%s", cari);
 
+            // ubah ke lowercase
+            for (int i = 0; cari[i]; i++) cari[i] = tolower(cari[i]);
+
             printf("\n=== HASIL PENCARIAN ===\n");
             for (int i = 0; i < jumlah; i++) {
-                if (strcmp(data[i].merk, cari) == 0) {
+                char merkLower[30];
+                strcpy(merkLower, data[i].merk);
+
+                for (int j = 0; merkLower[j]; j++)
+                    merkLower[j] = tolower(merkLower[j]);
+
+                if (strcmp(merkLower, cari) == 0) {
                     printf("Merk  : %s\n", data[i].merk);
                     printf("Tipe  : %s\n", data[i].tipe);
                     printf("Tahun : %d\n", data[i].tahun);
+                    printf("Harga : %.2f\n", data[i].harga_final);
                     found = 1;
                 }
             }

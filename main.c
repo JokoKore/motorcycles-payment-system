@@ -3,9 +3,9 @@
 #include "login_admin.h"
 #include "login_pembeli.h"
 #include "menu_admin.h"
-#include "menu_pembeli.C"
+#include "menu_pembeli.h"
 
-int main(int argc, char const *argv[])
+int main()
 {
 
     int pilihan;
@@ -26,10 +26,9 @@ int main(int argc, char const *argv[])
             break;
 
         case 2:
-         if (loginPembeli() != 0) {
-                exit(1); 
+          if (loginPembeli() == 1) {
+                menuPembeli();
             }
-            menuPembeli();
             
             break;
     
