@@ -119,6 +119,7 @@ int loginPembeli() {
 
         if (file_password == NULL) {
             printf("\nNo user database found!\n");
+            return 0;
             break;
         }
 
@@ -142,8 +143,8 @@ int loginPembeli() {
                         return 1;
                         break;
                     } else {
-                        chances--;
                         printf("Wrong password! (%d chances left) ", chances);
+                        chances--;
                     }
                 }
 
@@ -156,9 +157,9 @@ int loginPembeli() {
 
         if (!user_found)
             printf("\nUser is not registered!\n");
-
-        fclose(file_password);
-        break;
+            fclose(file_password);
+            return 0;
+            break;
     }
 
     default:
