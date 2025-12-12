@@ -15,15 +15,16 @@ struct User {
     char password[50];
     char address[50];
     char gender[50];
+    char noTelp[50];
 };
 
 void takeInput(char input[50]) {
     fgets(input, 50, stdin);
-    input[strcspn(input, "\n")] = 0;  // safer
+    input[strcspn(input, "\n")] = 0;  
 }
 
 void takePassword(char password[50]) {
-    int i = 0;          // FIXED: harus 0
+    int i = 0;     
     char input;
 
     while (1) {
@@ -71,17 +72,19 @@ int loginPembeli() {
     switch (opt) {
 
     case 1:
-        printf("Enter Your Fullname: ");
+        printf("Masukan nama lengkap: ");
         takeInput(user.name);
-        printf("Enter Your Email: ");
+        printf("Masukan Email : ");
         takeInput(user.email);
-        printf("Enter Your Gender: ");
+        printf("Masukan Gender: ");
         takeInput(user.gender);
-        printf("Enter Your Address: ");
+        printf("Masukan Alamat: ");
         takeInput(user.address);
-        printf("Enter Your Password: ");
+        printf("Masukan No. Telepon: ");
+        takeInput(user.noTelp);
+        printf("Masukan Password: ");
         takePassword(user.password);
-        printf("Confirm Your Password: ");
+        printf("Konfirmasi Password: ");
         takePassword(confirm_password);
 
         if (strcmp(user.password, confirm_password) == 0) {
@@ -96,8 +99,10 @@ int loginPembeli() {
                 printf("\nSomething went wrong");
 
             fclose(file_password);
+            return 0;
         } else {
             printf("\nYour password does not match\n");
+            return 0;
         }
         break;
 
@@ -107,7 +112,7 @@ int loginPembeli() {
         int chances = 3;
         user_found = false;
 
-        printf("\nEnter your username: ");
+        printf("Enter your username: ");
         takeInput(username);
 
         file_password = fopen("User.dat", "rb");
@@ -122,7 +127,7 @@ int loginPembeli() {
                 user_found = true;
 
                 while (chances > 0) {
-                    printf("\nEnter your Password (%d chances left): ", chances);
+                    printf("Enter your Password: ");
                     takePassword(password);
 
                     if (strcmp(usr.password, password) == 0) {
@@ -132,11 +137,13 @@ int loginPembeli() {
                         printf("| Email     : %s\n", usr.email);
                         printf("| Username  : %s\n", usr.username);
                         printf("| Address   : %s\n", usr.address);
+                        printf("| Nomor Telepon   : %s\n", usr.noTelp);
                         chances = -1;
+                        return 1;
                         break;
                     } else {
-                        printf("Wrong password!\n");
                         chances--;
+                        printf("Wrong password! (%d chances left) ", chances);
                     }
                 }
 

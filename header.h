@@ -29,4 +29,6 @@ struct DataPembeli
 float harga_setelah_diskon(float harga, float diskon);
 
 
+
+
 #endif

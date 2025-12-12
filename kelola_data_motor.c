@@ -3,6 +3,18 @@
 #include <ctype.h>
 #include "header.h"
 
+void sortMotorByHarga(struct Motor data[], int jumlah) {
+    struct Motor temp;
+    for (int i = 0; i < jumlah - 1; i++) {
+        for (int j = i + 1; j < jumlah; j++) {
+            if (data[i].harga_final > data[j].harga_final) {
+                temp = data[i];
+                data[i] = data[j];
+                data[j] = temp;
+            }
+        }
+    }
+}
 
 float harga_setelah_diskon(float harga, float diskon) {
     return harga - (harga * diskon / 100);
@@ -40,7 +52,7 @@ void loadFromFile(struct Motor data[], int *jumlah) {
 
 int kelolaDataMotor() {
     struct Motor data[50];
-    int jumlah = 0;
+    int jumlah = 1;
     int pilihan;
 
     loadFromFile(data, &jumlah);
@@ -59,7 +71,6 @@ int kelolaDataMotor() {
         switch (pilihan) {
 
         case 1: {
-    float harga_asli;
 
     printf("\nMasukkan Merk Motor  : ");
     scanf("%s", data[jumlah].merk);
@@ -71,12 +82,13 @@ int kelolaDataMotor() {
     scanf("%d", &data[jumlah].tahun);
 
     printf("Masukkan Harga Motor : ");
-    scanf("%f", &harga_asli);
+    scanf("%f", &data[jumlah].harga_asli);
 
     printf("Masukkan Diskon (%%) : ");
     scanf("%f", &data[jumlah].diskon);
 
-    data[jumlah].harga_final = harga_setelah_diskon(harga_asli, data[jumlah].diskon);
+    data[jumlah].harga_final = harga_setelah_diskon(data[jumlah].harga_asli, data[jumlah].diskon);
+    sortMotorByHarga(data, jumlah + 1);
 
     jumlah++;
     saveToFile(data, jumlah);
